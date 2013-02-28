@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>UItest for jQuery</title>
+    <link href="css/smoothness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet">
+    <link href="css/planning.css" rel="stylesheet">
+    <link href="css/table_jui.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBX6B0VdzGNStK65bSf_MWZvtEf-4OlKws&sensor=false"></script>
+
+    <script id="source" language="javascript" type="text/javascript">
+
+      function ClickRow()
+      {
+        var rowdata = $('#table_id').dataTable().fnGetData(this);
+        $('#detail').text(rowdata[0]).show();
+      }
+
+      var row = 0;
+
+      $(function () 
+      {
+        $('#list').show();
+        $('#detail').show();
+        $('#datepicker').datepicker({ dateFormat: "yy-mm-dd", changeYear: true, changeMonth: true, minDate: "2003-01-01" });
+        $('#add').button({ icons: { primary: "ui-icon-search" }});
+        $('#clear').button({ icons: { primary: "ui-icon-circle-close" }});
+
+        $('#table_id').dataTable({
+          "bFilter": false,
+          "sPaginationType": "full_numbers",
+          "bLengthChange": false,
+          "iDisplayLength": 8,
+          "bJQueryUI": true,
+          "sDom": '<"H"ip>t<"F">',
+          "aoColumnDefs": [
+              { "bSearchable": false, "bVisible": false, "aTargets": [0] },
+              { "sClass": "right", "aTargets": [2] },
+              { "sClass": "left", "aTargets": [1,3,4] }
+            ]
+        });
+
+        $('#table_id').dataTable().$('tr').click(ClickRow);
+
+        $('#clear').click(function(e)
+        {
+          e.preventDefault();
+          $('#table_id').dataTable().fnClearTable();
+          $('#detail').text("Clear pressed");
+        });
+
+        $('#add').click(function(e)
+        {
+          e.preventDefault();
+          row++;
+          $('#table_id').dataTable().fnAddData([ row, "S/0083/09/O", "7 Berrycroft", "2009-02-01", "Dwelling" ]);
+          $('#table_id').dataTable().$('tr').click(ClickRow);
+        });
+
+        var mapSpot = new google.maps.LatLng(52.309594,0.059738);
+        var mapOptions = 
+        {
+          center: mapSpot,
+          zoom: 14,
+          disableDefaultUI: true,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById("gmap"),mapOptions);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': "16 Berrycroft willingham" }, function(results, status)
+        {
+          if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+          }
+        });
+
+        var code = $("#code"),
+            email = $("#email"),
+            password = $("#password");
+
+        $("#editApp").dialog(
+        {
+          title: "Edit Application",
+          autoOpen: false,
+          height: 300,
+          width: 600,
+          modal: true,
+          buttons:
+          {
+            "Update": function()
+            {
+                $("#detail").append("<p>" + code.val() + " " + email.val() + " " + password.val() + "</p>");
+                $(this).dialog("close");
+            },
+            Cancel: function() 
+            {
+              $(this).dialog("close");
+            }
+          }
+        });
+     
+        $("#edit").button().click(function()
+        {
+          code.val('S/0123/99');
+          $("#editApp").dialog("open").dialog("option", { title: "Create Application" });
+        });
+      }); 
+
+    </script>
+    <style>
+    .app_addr
+    {
+      font-size: 1.5em;
+      border-top-style:none;
+      float:left;
+    }
+    .app_sep
+    {
+      border-top-style:solid;
+      clear:both;
+    }
+    .app_desc
+    {
+      clear:left;
+    }
+    #gmap
+    {
+      width: 200px;
+      height: 150px;
+      float: right;
+    }
+
+    // label, input { display:block; }
+    // input.text { margin-bottom:12px; width:95%; padding: .4em; }
+    // fieldset { padding:0; border:0; margin-top:25px; }
+    </style>
+  </head>
+  <body>
+
+  <h1>UItest for jQuery</h1>
+  <p>Date: <input type="text" id="datepicker" /><button id="add">Add</button><button id="clear">Clear</button></p>
+  <hr />
+  <div id="list">
+  <table id="table_id" class="display">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Application</th>
+        <th>Address</th>
+        <th>Date</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <td>22</td><td>S/0083/09/O</td><td>7 Berrycroft</td><td>2009-02-01</td><td>Dwelling</td></tr>
+      <td>23</td><td>S/1348/10/O</td><td>7 Berrycroft</td><td>2010-09-01</td><td>Dwelling</td></tr>
+      <td>24</td><td>S/1276/11/</td> <td>7 Berrycroft</td><td>2011-07-01</td><td>Dwelling</td></tr>
+      <td>25</td><td>S/1784/07/F</td><td>16 Berrycroft</td><td>2007-10-01</td><td>Change of Use</td></tr>
+      <td>26</td><td>S/1462/05/F</td><td>17 Berrycroft</td><td>2005-08-01</td><td>Extension</td></tr>
+      <td>27</td><td>S/0631/00/F</td><td>18 Berrycroft</td><td>2000-04-01</td><td>Change of Use</td></tr>
+      <td>28</td><td>S/1830/07/L</td><td>27 Berrycroft</td><td>2007-10-01</td><td>Alteration</td></tr>
+      <td>29</td><td>S/0096/02/F</td><td>27 Berrycroft</td><td>2002-01-01</td><td>Outbuilding</td></tr>
+      <td>30</td><td>S/1618/99/F</td><td>Berrycroft</td><td>1999-10-01</td><td>Change of Use</td></tr>
+      <td>31</td><td>S/1702/01/F</td><td>Berrycroft</td><td>2001-09-01</td><td>Change of Use</td></tr>
+      <td>32</td><td>S/1933/00/F</td><td>Berrycroft</td><td>2000-10-01</td><td>Development</td></tr>
+      <td>33</td><td>S/2238/03/F</td><td>Berrycroft</td><td>2004-07-01</td><td>Section 106</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <hr />
+  <div id="detail" style="display:none">this element will be accessed by jquery and this text replaced</div>
+  <hr />
+  <div id="application">
+    <div class="app_code"><a href="http://plan.scambs.gov.uk/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theApnID=S/1784/07/F" target="_blank">S/1784/07/F</a></div>
+    <div class="app_date">2007-09-01</div>
+    <div class="app_sep"></div>
+    <div class="app_addr">16 Berrycroft</div>
+    <div id="gmap"></div>
+    <div class="app_desc"><b>Change of Use</b> from shop (A1) to hot food takeaway (A/5) and installation of extractor flue</div>
+    <table class="app_decide">
+      <thead>
+        <tr>
+          <th class="app_title">WPC Recommendation</th>
+          <th class="app_title">SCDC</th>
+          <th class="app_title">Appeal</th>
+        </tr>
+      </thead>
+      <tbody>
+       <tr>
+        <td><div class="app_wpc">Refusal</td>
+        <td>Refused</td>
+        <td></td>
+       </tr>
+       <tr>
+         <td>2007-10-04 6iii</td>
+         <td></td>
+         <td></td>
+       </tr>
+     </tbody>
+    </table>
+    <button id="edit">Edit</button>
+  </div>
+
+  <div id="editApp">
+    <form>
+      <label for="code">Code</label>
+      <input type="text" name="code" id="code" class="text ui-widget-content ui-corner-all" />
+      <label for="email">Email</label>
+      <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
+      <br />
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" />
+    </form>
+  </div>
+   
+  </body>
+</html>

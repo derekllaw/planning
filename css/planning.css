@@ -1,0 +1,154 @@
+/*
+  planning.css
+
+  Stylesheet for planning application database
+*/
+
+body
+{
+  font: 75% "Trebuchet MS", sans-serif;
+  background: url(bricks-bg.jpg);
+}
+
+a:link    { color:blue; text-decoration:none }
+a:visited { color:teal; text-decoration:none }
+a:active  { color:maroon }
+a:hover   { color:red }
+
+#container
+{ 
+  width: 600px;
+  margin: 0px;
+  padding: 0px;
+}
+
+#pageHeader
+{
+  background: url(head-bg.png) no-repeat top;
+  background-origin:content-box;
+  width: 630px;
+  height: 100px;
+  margin: 0;
+}
+
+#pageHeader h1
+{
+  display: none;
+}
+
+#topButton, #botButton
+{
+  display: block;
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+}
+
+#pageContent
+{ 
+  background: url(body-bg.png) repeat-y;
+  width: 630px;
+  margin: 0px -3px;
+  padding-left: 20px;
+  background-position: 0px -20px
+}
+
+#pageFooter
+{
+  background: url(head-bg.png) no-repeat bottom;
+  width: 630px;
+  height: 20px;
+  margin: 0;
+}
+
+#find, #new, #login
+{
+  font-size: 1em;
+  float: right;
+}
+#error
+{
+  
+}
+#application
+{
+  border:1px solid black;
+  padding:5px;
+  background: #F4F8FB;
+}
+.app_code
+{
+  font-weight:bold;
+  font-size: 2em;
+  float: left;
+}
+.app_date
+{
+  font-size: 1.5em;
+  float: right;
+}
+.app_sep
+{
+  border-top-style:solid;
+  clear:both;
+}
+.app_addr
+{
+  font-size: 1.5em;
+  /* border-top-style:none; */
+  float:left;
+}
+.app_gmap
+{
+  width: 250px;
+  height: 150px;
+  float: right;
+}
+.app_label
+{
+  font-weight:bold;
+  clear:left;
+}
+.app_desc
+{
+}
+.app_title
+{
+  text-align:left;
+  border-bottom:2px solid;
+}
+.app_wpc
+{
+}
+.app_decide
+{
+  width: 100%;
+}
+#progress
+{
+  height:20px;
+  margin:5px auto; 
+}
+.appedit
+{
+  background: #FFFFF0;
+  font-size: 1em;
+}
+.appedit .ui-widget-header
+{
+  border-radius: 0;
+  border-top:none;
+  border-left:none;
+  border-right:none;
+  border-bottom:2px solid;
+  background: none;
+}
+.appedit .label
+{
+  text-align:right;
+}
+.appedit .ui-dialog-buttonpane
+{
+  background: none;
+  margin: 0;
+  padding: 0;
+}
