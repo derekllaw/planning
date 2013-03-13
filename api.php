@@ -191,17 +191,12 @@ function add_application($p_db,$p_street,$p_number,$p_date,$p_code,$p_apptype,$p
     $stmt = $p_db->stmt_init();
     if ($stmt->prepare("INSERT INTO application (address,date,code,apptype,appdesc,wpc,meeting,item,scdc,appeal) VALUES (?,?,?,?,?,?,?,?,?,?)"))
     {
-      $stmt->bind_param("ississssss",$f_address,$f_date,$f_code,$f_apptype,$f_appdesc,$f_wpc,$f_meeting,$f_item,$f_scdc,$f_appeal);
+      $stmt->bind_param("ississssss",$f_address,$p_date,$p_code,$f_apptype,$p_appdesc,$f_wpc,$p_meeting,$p_item,$f_scdc,$f_appeal);
       $f_address = $locationrow['id'];
-      $f_date    = $p_date;             // can this just go straight in the bind_param?
-      $f_code    = $p_code;
       $f_apptype = $apptyperow['id'];
-      $f_appdesc = $p_appdesc;
-      $f_wpc     = $p_wpc;
-      $f_meeting = $p_meeting;
-      $f_item    = $p_item;
-      $f_scdc    = $p_scdc;
-      $f_appeal  = $p_appeal;
+      $f_wpc     = ($p_wpc=="")? NULL: $p_wpc;
+      $f_scdc    = ($p_scdc=="")? NULL: $p_scdc;
+      $f_appeal  = ($p_appeal=="")? NULL: $p_appeal;
       $stmt->execute();
       $result = array("result"=>(($stmt->affected_rows==1)? "added": "failed"));
       $stmt->close();
