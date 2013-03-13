@@ -187,6 +187,27 @@ function add_application($p_db,$p_street,$p_number,$p_date,$p_code,$p_apptype,$p
     $locationrow = get_location($p_db,$streetrow['id'],$p_number);
     $apptyperow = get_apptype($p_db,$p_apptype);
 
+    // prepare version - should insert NULLs for empty strings
+    $stmt = $p_db->stmt_init();
+    if ($stmt->prepare("INSERT INTO application (address,date,code,apptype,appdesc,wpc,meeting,item,scdc,appeal) VALUES (?,?,?,?,?,?,?,?,?,?)"))
+    {
+      $stmt->bind_param("ississssss",$f_address,$f_date,$f_code,$f_apptype,$f_appdesc,$f_wpc,$f_meeting,$f_item,$f_scdc,$f_appeal);
+      $f_address = $locationrow['id'];
+      $f_date    = $p_date;             // can this just go straight in the bind_param?
+      $f_code    = $p_code;
+      $f_apptype = $apptyperow['id'];
+      $f_appdesc = $p_appdesc;
+      $f_wpc     = $p_wpc;
+      $f_meeting = $p_meeting;
+      $f_item    = $p_item;
+      $f_scdc    = $p_scdc;
+      $f_appeal  = $p_appeal;
+      $stmt->execute();
+      $result = array("result"=>(($stmt->affected_rows==1)? "added": "failed"));
+      $stmt->close();
+    }
+
+/*
     $res = $p_db->query("INSERT INTO application (address,date,code,apptype,appdesc,wpc,meeting,item,scdc,appeal) VALUES (".$locationrow['id'].",'$p_date','$p_code','".$apptyperow['id']."','$p_appdesc','$p_wpc','$p_meeting','$p_item','$p_scdc','$p_appeal')");
     if ($res)
     {
@@ -196,11 +217,11 @@ function add_application($p_db,$p_street,$p_number,$p_date,$p_code,$p_apptype,$p
     {
       $result = array("result"=>"failed");
     }
+*/
   }
 
   return ($result);
 }
-
 // -----------------------------------------------------------------------
 // tidy_tables
 // _______________________________________________________________________
@@ -237,7 +258,7 @@ else
   switch($func)
   {
   case 'list':
-    $query = "SELECT application.id, application.code, location.number, street.name, application.date, apptype.label FROM application ";
+    $query = "SELECT application.id, application.code, location.number, street.name, application.date, apptype.label, application.wpc FROM application ";
     $query .= "JOIN location ON location.id=application.address ";
     $query .= "JOIN street ON street.id=location.street ";
     $query .= "JOIN apptype ON apptype.id=application.apptype ";

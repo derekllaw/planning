@@ -15,7 +15,7 @@ function initMap()
   var mapOptions =
   {
     center: mapSpot,
-    zoom: 14,
+    zoom: 16,
     disableDefaultUI: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
@@ -23,6 +23,10 @@ function initMap()
 }
 
 var Recommend = { a: "Approval", r: "Refusal", n: "None" };
+function getRecommend(code)
+{
+  return ((code==null)? "": Recommend[code]);
+}
 
 var Decision = { a: "Approved", r: "Refused", w: "Withdrawn" };
 function getDecision(code)
@@ -32,7 +36,7 @@ function getDecision(code)
 
 var MonthName = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 
-var scdcQuery = "http://plan.scambs.gov.uk/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theApnID=";
+var scdcQuery = "http://plan.scambs.gov.uk/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theTabNo=2&theApnID=";
 
 $(function()
 {
@@ -80,7 +84,18 @@ $(function()
   var fdindex = $('#delindex');
 
   // set up dataTables table
+  // no initial sorting (without this it sorts on the invisible ID column)
+  // no Filter or Filter input
+  // paginate with numbers
+  // fixed page length
+  // at 10 items per page
+  // format with jqueryUI
+  // layout: jqueryUI header with info and pagination, the table, jqueryUI footer
+  // columns: hide column 0 (ID)
+  //          right align CSS for column 2
+  //          left align CSS for columns 1,3,4,5
   $('#apptable').dataTable({
+      "aaSorting": [],
       "bFilter": false,
       "sPaginationType": "full_numbers",
       "bLengthChange": false,
@@ -90,7 +105,7 @@ $(function()
       "aoColumnDefs": [
           { "bSearchable": false, "bVisible": false, "aTargets": [0] },
           { "sClass": "right", "aTargets": [2] },
-          { "sClass": "left", "aTargets": [1,3,4] }
+          { "sClass": "left", "aTargets": [1,3,4,5] }
         ]
     });
 
@@ -134,7 +149,7 @@ $(function()
 
   // populate year selections
   var today = new Date();
-  for (var y = 1999; y<=today.getFullYear(); y++)
+  for (var y = today.getFullYear(); y>=1999; y--)
   {
     $('#year').append($("<option></option>").attr("value",y).text(y));
     $('#mtngyear').append($("<option></option>").attr("value",y).text(y));
@@ -220,7 +235,8 @@ $(function()
   {
     autoOpen: false,
     height: 300,
-    width: 500,
+    width: 550,
+    position: { my: "left", at: "left", of: $('#container') },
     modal: true,
     dialogClass: "appedit",
     resizable: false,
@@ -282,6 +298,7 @@ $(function()
   {
     autoOpen: false,
     width: 400,
+    position: { my: "left", at: "left", of: $('#container') },
     modal: true,
     dialogClass: "appdelete",
     resizable: false,
@@ -399,7 +416,7 @@ $(function()
         for (var r=0; r<data.length; r++)
         {
           var address = data[r]['number'] + " " + data[r]['name'];
-          $('#apptable').dataTable().fnAddData([ data[r]['id'], data[r]['code'], address, data[r]['date'], data[r]['label'] ]);
+          $('#apptable').dataTable().fnAddData([ data[r]['id'], data[r]['code'], address, data[r]['date'], data[r]['label'], getRecommend(data[r]['wpc']) ]);
           $('#apptable').dataTable().$('tr').click(ClickRow);
         }
 
@@ -426,6 +443,11 @@ $(function()
     findx.val(rowdata[0]);
     fdindex.val(rowdata[0]);
 
+    // force this to happen, not sure why it is different to updating later
+    $('#app_wpc').text("");
+    $('#app_scdc').text("");
+    $('#app_appeal').text("");
+
     // and use it in ajax query
     $.ajax({
       url: 'api.php',
@@ -439,8 +461,7 @@ $(function()
         $('#app_addr').text(data['number'] + " " + data['name']);
         $('#app_label').text(data['label']);
         $('#app_desc').text(data['appdesc']);
-        $('#app_wpc').text(Recommend[data['wpc']]);
-        $('#app_appeal').text(Recommend[data['appeal']]);
+        $('#app_wpc').text(getRecommend(data['wpc']));
         if (data['meeting']!="0000-00-00")
         {
           $('#app_meeting').text(data['meeting'] + " " + data['item']);
@@ -450,6 +471,7 @@ $(function()
           $('#app_meeting').text("");
         }
         $('#app_scdc').text(getDecision(data['scdc']));
+        $('#app_appeal').text(getDecision(data['appeal']));
 
         $('#application').show();
 
@@ -486,7 +508,7 @@ $(function()
           $('#appdelete').dialog("option", { title: "Are you sure?" }).dialog("open");
         });
 
-        // use stored data or look it up and store it
+        // use stored data or look it up and store it 
         if ((data['geolat']!=null) & (data['geolng']!=null))
         {
           var mapSpot = new google.maps.LatLng(data['geolat'],data['geolng']);
