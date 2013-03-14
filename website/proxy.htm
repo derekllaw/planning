@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+    <title>jQuery Proxy Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <style>
+    body
+    {
+      font: 75% 'Lora', serif;
+    }
+    .ajaxappn
+    {
+      cursor:pointer;
+    }
+    </style>
+  </head>
+  <body>
+  <h1>Ajax with jQuery - using YQL</h1>
+  <ul>
+   <li>Get <span class="ajaxappn">S/2102/12/AD</span></li>
+   <li>Get <span class="ajaxappn">S/0227/13/FL</span></li>
+   <li>Get <span class="ajaxappn">S/2532/12/FL</span></li>
+   <li>Get <span class="ajaxappn">S/0241/13/FL</span></li>
+   <li><a href="http://plan.scambs.gov.uk/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theTabNo=2&theApnID=S/2532/12/FL" class="ajaxhref">Get S/2532/12/FL</a></li>
+  </ul>
+  <h2 id="result">Description</h2>
+  <div id="target"></div>
+  <script>
+    $(function()
+    {
+      var container = $('#target');
+      
+      $('.ajaxhref').click(function(){
+        $('#result').text("HREF Description");
+        container.empty();
+        doAjaxHref($(this).attr('href'));
+        return false;
+      });
+      
+      function doAjaxHref(url)
+      {
+        $.getJSON("http://query.yahooapis.com/v1/public/yql?"+
+                  "q=select%20*%20from%20html%20where%20url%3D%22"+
+                  encodeURIComponent(url)+
+                  "%22&format=xml'&callback=?",
+                  function(data)
+                  {
+                    if (data.results[0])
+                    {
+                      var desc = $('input[name="DEVLDESC.PAPROPOSAL.PACIS2.1-1"]',data.results[0]).val();
+                      container.text(desc);
+                    }
+                    else
+                    {
+                      var errormsg = 'Error: could not load the page.';
+                      container.html(errormsg);
+                    }
+                  }
+                 );
+      }
+
+      $('.ajaxappn').click(function(){
+        $('#result').text("SPAN Description");
+        container.empty();
+        doAjaxAppn($(this).text());
+        return false;
+      });
+      
+      function doAjaxAppn(appcode)
+      {
+        $.getJSON("http://query.yahooapis.com/v1/public/yql?"+
+                  "q=select%20*%20from%20html%20where%20url%3D%22"+
+                  "http%3A%2F%2Fplan.scambs.gov.uk%2Fswiftlg%2Fapas%2Frun%2FWPHAPPDETAIL.DisplayUrl%3FtheTabNo%3D2%26theApnID%3D"+
+                  encodeURIComponent(appcode)+
+                  "%22&format=xml'&callback=?",
+                  function(data)
+                  {
+                    if (data.results[0])
+                    {
+                      var desc = $('input[name="DEVLDESC.PAPROPOSAL.PACIS2.1-1"]',data.results[0]).val();
+                      container.text(appcode + ": " + desc);
+                    }
+                    else
+                    {
+                      var errormsg = 'Error: could not load the page.';
+                      container.html(errormsg);
+                    }
+                  }
+                 );
+      }
+
+    });
+    </script>
+  </body>
+</html>
