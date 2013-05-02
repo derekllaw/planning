@@ -581,7 +581,7 @@ else
     echo "<li>listapptypes()</li>";
     echo "<li>getstreet(name)</li>";
     echo "<li>getlocation(name,number)</li>";
-    echo "<li>getapptype()</li>";
+    echo "<li>getapptype(apptype)</li>";
     echo "<li>get(id)</li>";
     echo "<li>add(street,number,date,code,apptype,appdesc,wpc,meeting,item,scdc,appeal)</li>";
     echo "<li>edit(id,street,number,date,code,apptype,appdesc,wpc,meeting,item,scdc,appeal)</li>";
