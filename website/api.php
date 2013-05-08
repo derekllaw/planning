@@ -187,7 +187,7 @@ function add_application($p_db,$p_street,$p_number,$p_date,$p_code,$p_apptype,$p
     $locationrow = get_location($p_db,$streetrow['id'],$p_number);
     $apptyperow = get_apptype($p_db,$p_apptype);
 
-    // prepare version - should insert NULLs for empty strings
+    // prepare version - inserts NULLs for empty strings
     $stmt = $p_db->stmt_init();
     if ($stmt->prepare("INSERT INTO application (address,date,code,apptype,appdesc,wpc,meeting,item,scdc,appeal) VALUES (?,?,?,?,?,?,?,?,?,?)"))
     {
@@ -422,7 +422,7 @@ else
     break;
 
   case 'edit':
-    // edit and existing application
+    // edit an existing application
     // e.g. api.php?func=edit&id=28&street=Berrycroft&number=27&date=2007-10-01&code=S/1830/07/L&apptype=Alteration&appdesc=Alterations to LB&wpc=a&meeting=2007-10-29&item=7i&scdc=a&appeal=r
     $id = get_query_param('id');
     $street = get_query_param('street');
@@ -441,6 +441,22 @@ else
     $locationrow = get_location($db,$streetrow['id'],$number);
     $apptyperow = get_apptype($db,$apptype);
 
+    // prepare version - inserts NULLs for empty strings
+    $stmt = $db->stmt_init();
+    if ($stmt->prepare("UPDATE application SET address=?,date=?,code=?,apptype=?,appdesc=?,wpc=?,meeting=?,item=?,scdc=?,appeal=? WHERE id=?"))
+    {
+      $stmt->bind_param("ississssssi",$f_address,$date,$code,$f_apptype,$appdesc,$f_wpc,$meeting,$item,$f_scdc,$f_appeal,$id);
+      $f_address = $locationrow['id'];
+      $f_apptype = $apptyperow['id'];
+      $f_wpc     = ($wpc=="")? NULL: $wpc;
+      $f_scdc    = ($scdc=="")? NULL: $scdc;
+      $f_appeal  = ($appeal=="")? NULL: $appeal;
+      $stmt->execute();
+      $result = array("result"=>(($stmt->affected_rows==1)? "updated": "failed"));
+      $stmt->close();
+    }
+
+/*
     $res = $db->query("UPDATE application SET address='".$locationrow['id']."',date='$date',code='$code',apptype='".$apptyperow['id']."',appdesc='$appdesc',wpc='$wpc',meeting='$meeting',item='$item',scdc='$scdc',appeal='$appeal' WHERE id=$id");
     if ($res)
     {
@@ -452,6 +468,7 @@ else
     {
       $result = array("result"=>"failed");
     }
+*/
 
     echo json_encode($result);
     break;
