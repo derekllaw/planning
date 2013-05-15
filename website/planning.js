@@ -416,7 +416,7 @@ $(function()
         for (var r=0; r<data.length; r++)
         {
           var address = data[r]['number'] + " " + data[r]['name'];
-          $('#apptable').dataTable().fnAddData([ data[r]['id'], data[r]['code'], address, data[r]['date'], data[r]['label'], getRecommend(data[r]['wpc']) ]);
+          $('#apptable').dataTable().fnAddData([ data[r]['id'], data[r]['code'], address, data[r]['date'], data[r]['label'], getRecommend(data[r]['wpc']), getDecision(data[r]['scdc']) ]);
           $('#apptable').dataTable().$('tr').click(ClickRow);
         }
 
