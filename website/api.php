@@ -253,7 +253,7 @@ else
   switch($func)
   {
   case 'list':
-    $query = "SELECT application.id, application.code, location.number, street.name, application.date, apptype.label, application.wpc FROM application ";
+    $query = "SELECT application.id, application.code, location.number, street.name, application.date, apptype.label, application.wpc, application.scdc FROM application ";
     $query .= "JOIN location ON location.id=application.address ";
     $query .= "JOIN street ON street.id=location.street ";
     $query .= "JOIN apptype ON apptype.id=application.apptype ";
