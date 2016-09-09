@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="plan" ng-strict-di>
+
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!----><link rel="shortcut icon" href="/assets/favicon.ico" />
+
+  <title> Willingham PC Planning </title>
+
+  <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
+  <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+
+  <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
+  <script type="text/javascript" src="<%= file %>"></script><% }); %>
+
+</head>
+<body ng-controller="mainCtrl as main" ng-init="setVersion('<%= version %>');">
+<div class="container-fluid">
+  <h1>Willingham PC Planning</h1>
+  <div ui-view="main"></div>
+  <div>Copyright &copy; {{copyrightYear}} v{{version}}</div>
+</div>
+</body>
+</html>

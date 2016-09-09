@@ -1,0 +1,13 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Select Application</h3>
+  </div>
+  <div class="panel-body">
+    <label class="col-md-1 control-label">Street</label>
+    <div class="col-md-2">
+      <select class="form-control" ng-model="view.street" ng-change="view.onStreetChange()" ng-options="street.id as street.name for street in view.streetList">
+        <option value="">All streets</option>
+      </select>
+    </div>
+  </div>
+</div>

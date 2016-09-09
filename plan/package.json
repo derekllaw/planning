@@ -1,0 +1,31 @@
+{
+  "name": "plan",
+  "version": "0.1.0",
+  "description": "Willingham PC Planning",
+  "licenses": {
+    "type": "MIT",
+    "url": "https://raw.github.com/ngbp/ngbp/master/LICENSE"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bump": "0.7.0",
+    "grunt-cli": "^1.0.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-less": "^1.2.0",
+    "grunt-contrib-uglify": "^1.0.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-conventional-changelog": "^6.1.0",
+    "grunt-html2js": "^0.3.5",
+    "grunt-karma": "^0.8.2",
+    "grunt-ng-annotate": "^0.8.0",
+    "karma": "^0.12.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-coffee-preprocessor": "^0.2.1",
+    "karma-jasmine": "^0.1.5"
+  }
+}
