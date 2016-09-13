@@ -20,8 +20,8 @@ angular.module( 'plan.view', [])
    Description:   controller for the view page.
    
    *******************************************************************************/
-  .controller( 'ViewCtrl', ['$q', '$rootScope', '$window', '$stateParams', 'Restangular', 'model',
-    function ViewController( $q, $rootScope, $window, $stateParams, Restangular, model )
+  .controller( 'ViewCtrl', ['$q', '$scope', 'Restangular', 'model',
+    function ViewController( $q, $scope, Restangular, model )
     {
       var self = this;
       
@@ -37,11 +37,11 @@ angular.module( 'plan.view', [])
       self.apptype = null;
       
       console.log('ViewCtrl run');
-      
+  
       self.updateCount = function() {
         model.recordCount(self.street,self.number,self.apptype).then(
           function onSuccess(data) {
-            self.count = data;
+            self.count = parseInt(data);
           },
           function onError(reason) {
             console.log("Error " + reason.status + ", " + reason.statusText);

@@ -1,6 +1,6 @@
 {
   "name": "plan",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Willingham PC Planning",
   "main": "src/index.html",
   "private": true,

@@ -3,22 +3,25 @@
     <h3 class="panel-title">Select</h3>
   </div>
   <div class="panel-body">
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <select class="form-control" ng-model="view.street" ng-change="view.onStreetChange()" ng-options="street as street.name for street in view.streetList">
         <option value="">All streets</option>
       </select>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <select class="form-control" ng-model="view.number" ng-change="view.onNumberChange()" ng-options="number as number.number for number in view.numberList">
         <option value="">All numbers</option>
       </select>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <select class="form-control" ng-model="view.apptype" ng-change="view.onApptypeChange()" ng-options="apptype as apptype.label for apptype in view.apptypeList">
         <option value="">All types</option>
       </select>
     </div>
-    <div class="col-md-5"></div>
-    <div class="col-md-1 counter-text">Apps {{view.count}}</div>
+    <div class="col-sm-2" role="button" ng-click="view.onFetchClick()">
+      <span class="btn btn-sm btn-primary" ng-disabled="view.count<=0">
+        <i class="fa fa-download"></i> Fetch {{view.count}} Record<span ng-show="view.count!==1">s</span>
+      </span>
+    </div>
   </div>
 </div>
