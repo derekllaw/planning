@@ -352,9 +352,46 @@ else
     break;
 
   case 'liststreets':
-    $res = $db->query("SELECT * FROM street ORDER BY name");
-    $rows = array();
+    $apptype = get_query_param('apptype','all');
 
+    $query = "SELECT street.id, street.name FROM street ";
+
+    if ($apptype!='all')
+    {
+      $query .= "JOIN location ON location.street=street.id ";
+      $query .= "JOIN application ON application.address=location.id ";
+      $query .= "WHERE application.apptype=$apptype ";
+    }
+
+    $query .= "GROUP BY street.name ORDER BY street.name";
+
+    $res = $db->query($query);
+    $rows = array();
+    while ($row = $res->fetch_assoc())
+    {
+      $rows[] = $row;
+    }
+
+    echo json_encode($rows);
+    break;
+
+  case 'listnumbers':
+    $street = get_query_param('street');
+    $apptype = get_query_param('apptype','all');
+
+    $where = false;
+    $query = "SELECT location.id, location.number FROM location ";
+
+    if ($apptype!='all')
+    {
+      $query .= "JOIN application ON application.address=location.id WHERE application.apptype=$apptype ";
+      $where = true;
+    }
+
+    $query .= ($where? "AND": "WHERE")." location.street=$street GROUP BY location.number ORDER BY CAST(location.number AS DECIMAL)";
+
+    $res = $db->query($query);
+    $rows = array();
     while ($row = $res->fetch_assoc())
     {
       $rows[] = $row;
@@ -364,6 +401,7 @@ else
     break;
 
   case 'listlocations':
+    // deprecated
     $street = get_query_param('street','all');
 
     if ($street=='all')
@@ -391,9 +429,23 @@ else
     break;
 
   case 'listapptypes':
-    $res = $db->query("SELECT id,label FROM apptype ORDER BY label");
-    $rows = array();
+    $street = get_query_param('street',all);
 
+    if ($street=='all')
+    {
+      $query = "SELECT id,label FROM apptype ORDER BY label";
+    }
+    else
+    {
+      $query = "SELECT apptype.id, apptype.label FROM apptype ";
+      $query .= "JOIN application ON application.apptype=apptype.id ";
+      $query .= "JOIN location ON location.id=application.address ";
+      $query .= "WHERE location.street=$street ";
+      $query .= "GROUP BY apptype.label ORDER BY apptype.label";
+    }
+
+    $res = $db->query($query);
+    $rows = array();
     while ($row = $res->fetch_assoc())
     {
       $rows[] = $row;
@@ -628,9 +680,10 @@ else
     echo "<p>Error: unknown function $func</p>";
     echo "<p>Valid functions are:<ul>";
     echo "<li>list([street|location],[apptype],[year,[month]],[myear,[mmonth]])</li>";
-    echo "<li>liststreets()</li>";
+    echo "<li>liststreets([apptype])</li>";
     echo "<li>listlocations([street])</li>";
-    echo "<li>listapptypes()</li>";
+    echo "<li>listnumbers(street,[apptype])</li>";
+    echo "<li>listapptypes([street])</li>";
     echo "<li>getstreet(name)</li>";
     echo "<li>getlocation(name,number)</li>";
     echo "<li>getapptype(apptype)</li>";

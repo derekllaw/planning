@@ -41,7 +41,7 @@ describe('Model',function()
         ], {}, ''];
       });
     
-    model.streets().then(
+    model.streets(null).then(
       function onSuccess(data) {
         streetList = data;
       });
@@ -51,10 +51,31 @@ describe('Model',function()
     expect(streetList[2].name).toBe('Brickhills');
   }));
   
-  it('should call API to list street numbers',inject(function($httpBackend,model) {
+  it('should call API to list streets for an apptype',inject(function($httpBackend,model) {
+    var streetList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?apptype=1&func=liststreets').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { name: 'Balland Field' },
+          { name: 'Brickhills' }
+        ], {}, ''];
+      });
+    
+    model.streets({id:1}).then(
+      function onSuccess(data) {
+        streetList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(streetList.length).toBe(2);
+    expect(streetList[1].name).toBe('Brickhills');
+  }));
+  
+  it('should call API to list numbers for a street',inject(function($httpBackend,model) {
     var numberList;
     //Create an expectation for the correct url, and respond with a mock object
-    $httpBackend.expectGET('/?func=listlocations&street=1').respond(
+    $httpBackend.expectGET('/?func=listnumbers&street=1').respond(
       function (method, url, data, headers, params) {
         return [200, [
           { number: '1' },
@@ -63,7 +84,7 @@ describe('Model',function()
         ], {}, ''];
       });
     
-    model.numbers({id:1}).then(
+    model.numbers({id:1},null).then(
       function onSuccess(data) {
         numberList = data;
       });
@@ -71,6 +92,27 @@ describe('Model',function()
     $httpBackend.flush();
     expect(numberList.length).toBe(3);
     expect(numberList[1].number).toBe('2A');
+  }));
+  
+  it('should call API to list numbers for a street and type',inject(function($httpBackend,model) {
+    var numberList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?apptype=2&func=listnumbers&street=1').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { number: '1' },
+          { number: 'DunRoamin' }
+        ], {}, ''];
+      });
+    
+    model.numbers({id:1},{id:2}).then(
+      function onSuccess(data) {
+        numberList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(numberList.length).toBe(2);
+    expect(numberList[0].number).toBe('1');
   }));
   
   it('should call API to list apptypes',inject(function($httpBackend,model) {
@@ -85,13 +127,34 @@ describe('Model',function()
         ], {}, ''];
       });
     
-    model.apptypes().then(
+    model.apptypes(null).then(
       function onSuccess(data) {
         apptypeList = data;
       });
     
     $httpBackend.flush();
     expect(apptypeList.length).toBe(3);
+    expect(apptypeList[1].label).toBe('extension');
+  }));
+  
+  it('should call API to list apptypes for given street',inject(function($httpBackend,model) {
+    var apptypeList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?func=listapptypes&street=1').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { label: 'dwelling' },
+          { label: 'extension' }
+        ], {}, ''];
+      });
+    
+    model.apptypes({id:1}).then(
+      function onSuccess(data) {
+        apptypeList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(apptypeList.length).toBe(2);
     expect(apptypeList[1].label).toBe('extension');
   }));
   

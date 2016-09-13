@@ -7,33 +7,60 @@ angular.module('plan-model',['restangular'])
    model::streets
    
    Description:   Return list of street records
-   Params:        none
+   Params:        apptype - apptype record, or null
    Returns:       promise which resolves to array of streets, or rejects with reason
    *******************************************************************************/
-  model.streets = function() {
-    return Restangular.all('/').getList({ func: 'liststreets'});
+  model.streets = function(apptype) {
+    var params = { func: 'liststreets' };
+  
+    if (apptype!==null)
+    {
+      params.apptype = apptype.id;
+    }
+  
+    return Restangular.all('/').getList(params);
   };
   
   /*******************************************************************************
    model::numbers
    
    Description:   Return list of number records for given street
-   Params:        street record
+   Params:        street - street record, or null
+                  apptype - apptype record, or null
    Returns:       promise which resolves to array of numbers, or rejects with reason
    *******************************************************************************/
-  model.numbers = function(street) {
-    return Restangular.all('/').getList({ func: 'listlocations', street: street.id });
+  model.numbers = function(street,apptype) {
+    var params = { func: 'listnumbers' };
+  
+    if (street!==null)
+    {
+      params.street = street.id;
+    }
+  
+    if (apptype!==null)
+    {
+      params.apptype = apptype.id;
+    }
+  
+    return Restangular.all('/').getList(params);
   };
   
   /*******************************************************************************
    model::apptypes
    
    Description:   Return list of apptype records
-   Params:        none
+   Params:        street - street record, or null
    Returns:       promise which resolves to array of apptypes, or rejects with reason
    *******************************************************************************/
-  model.apptypes = function() {
-    return Restangular.all('/').getList({ func: 'listapptypes' });
+  model.apptypes = function(street) {
+    var params = { func: 'listapptypes' };
+  
+    if (street!==null)
+    {
+      params.street = street.id;
+    }
+  
+    return Restangular.all('/').getList(params);
   };
   
   /*******************************************************************************

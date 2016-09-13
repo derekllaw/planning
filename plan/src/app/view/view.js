@@ -36,8 +36,6 @@ angular.module( 'plan.view', [])
       self.apptypeList = [];
       self.apptype = null;
       
-      console.log('ViewCtrl run');
-  
       self.updateCount = function() {
         model.recordCount(self.street,self.number,self.apptype).then(
           function onSuccess(data) {
@@ -48,14 +46,17 @@ angular.module( 'plan.view', [])
           }
         );
       };
-
-      // when street updated, renew numberList
-      self.onStreetChange = function() {
+      
+      self.updateNumbers = function() {
         self.number = null;
-        self.updateCount();
-        model.numbers(self.street).then(
+        self.numberList = [];
+        model.numbers(self.street,self.apptype).then(
           function onSuccess(data) {
             self.numberList = data;
+            if (self.numberList.length===1)
+            {
+              self.number = self.numberList[0];
+            }
           },
           function onError(reason) {
             console.log("Error " + reason.status + ", " + reason.statusText);
@@ -63,8 +64,64 @@ angular.module( 'plan.view', [])
         );
       };
   
-      // when apptype updated, update count
+      self.updateApptypes = function() {
+        self.apptype = null;
+        model.apptypes(self.street).then(
+          function onSuccess(data) {
+            self.apptypeList = data;
+            if (self.apptypeList.length===1)
+            {
+              self.apptype = self.apptypeList[0];
+            }
+          },
+          function onError(reason) {
+            console.log("Error " + reason.status + ", " + reason.statusText);
+          }
+        );
+      };
+  
+      self.updateStreets = function() {
+        self.street = null;
+        model.streets(self.apptype).then(
+          function onSuccess(data) {
+            self.streetList = data;
+            if (self.streetList.length===1)
+            {
+              self.street = self.streetList[0];
+            }
+          },
+          function onError(reason) {
+            console.log("Error " + reason.status + ", " + reason.statusText);
+          }
+        );
+      };
+  
+      self.reset = function() {
+        self.apptype = null;
+        self.street = null;
+        self.updateApptypes();
+        self.updateStreets();
+        self.updateNumbers();
+        self.updateCount();
+      };
+  
+      // when street updated
+      self.onStreetChange = function() {
+        if (self.apptype===null)
+        {
+          self.updateApptypes();
+        }
+        self.updateNumbers();
+        self.updateCount();
+      };
+  
+      // when apptype updated
       self.onApptypeChange = function() {
+        if (self.street===null)
+        {
+          self.updateStreets();
+        }
+        self.updateNumbers();
         self.updateCount();
       };
   
@@ -73,22 +130,11 @@ angular.module( 'plan.view', [])
         self.updateCount();
       };
   
-      var promises = [];
-  
-      promises.push(model.streets());
-      promises.push(model.apptypes());
-  
-      $q.all(promises).then(
-        function success(data) {
-          self.streetList = data[0];
-          self.apptypeList = data[1];
-          // Fetch count
-          self.updateCount();
-        },
-        function onError(reason) {
-          console.log("Error " + reason.status + ", " + reason.statusText);
-        }
-      );
-  
+      self.onResetClick = function() {
+        self.reset();
+      };
+
+      // when starting
+      self.reset();
     }])
 ;
