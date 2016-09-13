@@ -26,7 +26,8 @@ angular.module('plan', [
   'ngSanitize',
   'uiGmapgoogle-maps',
   
-  'plan.view'
+  'plan.view',
+  'plan-model'
 ])
   
 .controller('mainCtrl', ['$scope', 'Restangular',

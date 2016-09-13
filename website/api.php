@@ -321,6 +321,36 @@ else
     echo json_encode($rows);
     break;
 
+  case 'count':
+    $query = "SELECT COUNT(*) AS NumberOfRecords FROM application ";
+    $query .= "JOIN location ON location.id=application.address ";
+
+    $where = false;
+    $street = get_query_param('street');
+    if ($street!="")
+    {
+      $query .= "WHERE location.street=$street ";
+      $where = true;
+    }
+
+    $number = get_query_param('number');
+    if ($number!="")
+    {
+      $query .= ($where? "AND": "WHERE")." location.number=$number ";
+      $where = true;
+    }
+
+    $apptype = get_query_param('apptype');
+    if ($apptype!="")
+    {
+      $query .= ($where? "AND": "WHERE")." apptype=$apptype ";
+    }
+
+    $res = $db->query($query);
+
+    echo json_encode($res->fetch_assoc());
+    break;
+
   case 'liststreets':
     $res = $db->query("SELECT * FROM street ORDER BY name");
     $rows = array();
@@ -342,7 +372,12 @@ else
     }
     else
     {
-      $query = "SELECT id, number FROM location WHERE street=$street ORDER BY CAST(number AS DECIMAL)";
+      $query = "SELECT id, number FROM location ";
+      if ($street!="")
+      {
+         $query .= "WHERE street=$street ";
+      }
+      $query .= "ORDER BY CAST(number AS DECIMAL)";
     }
 
     $res = $db->query($query);
@@ -606,6 +641,7 @@ else
     echo "<li>readcsv(file)</li>";
     echo "<li>writecsv(file,[geocode])</li>";
     echo "<li>geocode(id,lat,lng)</li>";
+    echo "<li>count([street],[number],[apptype])</li>";
     echo "</ul></p>";
     break;
   }

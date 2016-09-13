@@ -1,6 +1,4 @@
-angular.module( 'plan.view', [
-  'ui.router'
-])
+angular.module( 'plan.view', [])
   
   .config([ '$stateProvider', function config( $stateProvider ) {
     $stateProvider
@@ -22,26 +20,75 @@ angular.module( 'plan.view', [
    Description:   controller for the view page.
    
    *******************************************************************************/
-  .controller( 'ViewCtrl', ['$rootScope', '$window', '$stateParams', 'Restangular',
-    function ViewController( $rootScope, $window, $stateParams, Restangular )
+  .controller( 'ViewCtrl', ['$q', '$rootScope', '$window', '$stateParams', 'Restangular', 'model',
+    function ViewController( $q, $rootScope, $window, $stateParams, Restangular, model )
     {
       var self = this;
       
+      self.count = 0;
+      
       self.streetList = [];
-      self.street = "";
+      self.street = null;
+      
+      self.numberList = [];
+      self.number = null;
+      
+      self.apptypeList = [];
+      self.apptype = null;
       
       console.log('ViewCtrl run');
+      
+      self.updateCount = function() {
+        model.recordCount(self.street,self.number,self.apptype).then(
+          function onSuccess(data) {
+            self.count = data;
+          },
+          function onError(reason) {
+            console.log("Error " + reason.status + ", " + reason.statusText);
+          }
+        );
+      };
+
+      // when street updated, renew numberList
+      self.onStreetChange = function() {
+        self.number = null;
+        self.updateCount();
+        model.numbers(self.street).then(
+          function onSuccess(data) {
+            self.numberList = data;
+          },
+          function onError(reason) {
+            console.log("Error " + reason.status + ", " + reason.statusText);
+          }
+        );
+      };
   
-      // test API
-      Restangular.all('/').getList({ func: 'liststreets'}).then(
-        function onSuccess(data) {
-          self.streetList = data;
+      // when apptype updated, update count
+      self.onApptypeChange = function() {
+        self.updateCount();
+      };
+  
+      // when number updated, update count
+      self.onNumberChange = function() {
+        self.updateCount();
+      };
+  
+      var promises = [];
+  
+      promises.push(model.streets());
+      promises.push(model.apptypes());
+  
+      $q.all(promises).then(
+        function success(data) {
+          self.streetList = data[0];
+          self.apptypeList = data[1];
+          // Fetch count
+          self.updateCount();
         },
         function onError(reason) {
           console.log("Error " + reason.status + ", " + reason.statusText);
         }
       );
-      
+  
     }])
-
 ;
