@@ -1,0 +1,33 @@
+<div ng-controller="ListCtrl as list">
+  <div class="panel panel-primary" uib-collapse="!list.isOpen">
+    <div class="panel-body">
+      <table st-table="list.emptyList" st-safe-src="list.appList" class="table table-striped table-condensed table-responsive">
+        <thead>
+        <tr>
+          <th>Application</th>
+          <th>Address</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>WPC</th>
+          <th>SCDC</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="app in list.appList" ng-click="list.onRowClick(app)">
+          <td>{{app.code}}</td>
+          <td>{{app.number}} {{app.name}}</td>
+          <td>{{app.date}}</td>
+          <td>{{app.label}}</td>
+          <td><i class="fa fa-thumbs-up icon-yes" ng-show="app.wpc==='a'"></i><i class="fa fa-thumbs-down icon-no" ng-show="app.wpc==='r'"></i><i class="fa fa-meh-o" ng-show="app.wpc==='n'"></i></td>
+          <td><i class="fa fa-check icon-yes" ng-show="app.scdc==='a'"></i><i class="fa fa-close icon-no" ng-show="app.scdc==='r'"></i></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer">
+    <span class="text-left">WPC <i class="fa fa-thumbs-up icon-yes"></i> recommend approval, <i class="fa fa-thumbs-down icon-no"></i> recommend refusal, <i class="fa fa-meh-o"></i> make no recommendation.
+    SCDC <i class="fa fa-check icon-yes"></i> approved, <i class="fa fa-close icon-no"></i> refused.</span>
+    <span class="text-right">Selected: {{list.selected}}</span>
+    </div>
+  </div>
+</div>

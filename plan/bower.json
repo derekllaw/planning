@@ -24,13 +24,13 @@
     "animate.css": "~3.4.0",
     "fontawesome": "~4.5.0",
     "jquery": "~2.1.4",
-    "metisMenu": "~2.0.2",
     "moment": "~2.10.6",
     "oclazyload": "^1.0.9",
     "restangular": "^1.5.2",
     "AngularJS-Toaster": "^1.2.0",
     "angular-bootstrap-switch": "^0.5.0",
-    "angular-google-maps": "^2.3.4"
+    "angular-google-maps": "^2.3.4",
+    "angular-smart-table": "^2.1.8"
   },
   "dependencies": {},
   "resolutions": {

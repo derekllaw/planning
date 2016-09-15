@@ -1,3 +1,11 @@
+//******************************************************************************
+// MODULE: plan-model
+// $Date: $
+// $Revision: $
+// $LastChangedBy: $
+// DESCRIPTION:  model service for interaction with API
+//*******************************************************************************
+
 angular.module('plan-model',['restangular'])
 
 .factory('model',['$q', 'Restangular', function($q,Restangular) {
@@ -24,25 +32,45 @@ angular.module('plan-model',['restangular'])
   /*******************************************************************************
    model::numbers
    
-   Description:   Return list of number records for given street
+   Description:   Return list of number records for given street and apptype
    Params:        street - street record, or null
                   apptype - apptype record, or null
    Returns:       promise which resolves to array of numbers, or rejects with reason
    *******************************************************************************/
   model.numbers = function(street,apptype) {
     var params = { func: 'listnumbers' };
+    var valid = false;
+    var deferred = $q.defer();
   
     if (street!==null)
     {
       params.street = street.id;
+      valid = true;
     }
   
     if (apptype!==null)
     {
       params.apptype = apptype.id;
+      valid = true;
+    }
+
+    if (valid)
+    {
+      Restangular.all('/').getList(params).then(
+        function onSuccess(data) {
+          deferred.resolve(data);
+        },
+        function onError(reason) {
+          deferred.reject(reason);
+        }
+      );
+    }
+    else
+    {
+      deferred.reject({ status: -1, statusText: "Invalid arguments" });
     }
   
-    return Restangular.all('/').getList(params);
+    return deferred.promise;
   };
   
   /*******************************************************************************
@@ -101,6 +129,35 @@ angular.module('plan-model',['restangular'])
     );
 
     return deferred.promise;
+  };
+  
+  /*******************************************************************************
+   model::applications
+   
+   Description:   Return list of applications
+   Params:        apptype - apptype record, or null
+                  location - location record, or null
+                  street - street record, or null
+   Returns:       promise which resolves to array of streets, or rejects with reason
+   *******************************************************************************/
+  model.applications = function(apptype,location,street) {
+    var params = { func: 'list' };
+    
+    if (apptype!==null)
+    {
+      params.apptype = apptype.id;
+    }
+  
+    if (location!==null)
+    {
+      params.location = location.id;
+    }
+    else if (street!==null)
+    {
+      params.street = street.id;
+    }
+  
+    return Restangular.all('/').getList(params);
   };
   
   return model;

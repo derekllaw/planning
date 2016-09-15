@@ -74,13 +74,14 @@ module.exports = {
       'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js',
   
+      'vendor/angular-smart-table/dist/smart-table.min.js',
+
       'vendor/tether/dist/js/tether.min.js',
       'vendor/bootstrap/dist/js/bootstrap.min.js',
       'vendor/bootstrap-switch/dist/js/bootstrap-switch.min.js',
   
       'vendor/moment/min/moment.min.js',
       'vendor/oclazyload/dist/ocLazyLoad.js',
-      'vendor/metisMenu/dist/metisMenu.js',
       'vendor/lodash/dist/lodash.min.js',
       'vendor/AngularJS-Toaster/toaster.min.js',
       'vendor/restangular/dist/restangular.min.js',

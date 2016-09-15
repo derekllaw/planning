@@ -1,0 +1,40 @@
+<div ng-controller="SelectCtrl as select">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Select</h3>
+    </div>
+    <div class="panel-body">
+      <form>
+        <div class="col-sm-3">
+          <select class="form-control" ng-model="select.apptype" ng-change="select.onApptypeChange()"
+                  ng-options="apptype as apptype.label for apptype in select.apptypeList">
+            <option value="">All types</option>
+          </select>
+        </div>
+        <div class="col-sm-3">
+          <select class="form-control" ng-model="select.street" ng-change="select.onStreetChange()"
+                  ng-options="street as street.name for street in select.streetList">
+            <option value="">All streets</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <select class="form-control" ng-model="select.number" ng-disabled="select.numberList.length<2"
+                  ng-change="select.onNumberChange()"
+                  ng-options="number as number.number for number in select.numberList">
+            <option value="">All numbers</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <button ng-click="select.onFetchClick()" class="btn btn-sm btn-primary" ng-disabled="select.count<=0">
+            <i class="fa fa-download"></i> Fetch {{select.count}} Record<span ng-show="select.count!==1">s</span>
+          </button>
+        </div>
+        <div class="col-sm-1">
+          <button class="btn btn-sm btn-warning" ng-click="select.onResetClick()">
+            <i class="fa fa-undo"></i> Reset
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

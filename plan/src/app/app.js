@@ -1,17 +1,9 @@
-//*******************************************************************************
-// Project PLAN Application file
-//
-// (c) Fen Technology Ltd. 2015. All rights reserved.
-//
-// All rights reserved. Copying, compilation, modification, distribution or
-// any other use whatsoever of this material is strictly prohibited except in
-// accordance with a Software License Agreement.
 //******************************************************************************
-// MODULE:       app.js
+// MODULE: app
 // $Date: $
 // $Revision: $
 // $LastChangedBy: $
-// DESCRIPTION:  
+// DESCRIPTION: Application Controller
 //*******************************************************************************
 
 angular.module('plan', [
@@ -22,12 +14,13 @@ angular.module('plan', [
   'templates-layout',
   'oc.lazyLoad',
   'ui.bootstrap',
-  'ui.router',
   'ngSanitize',
   'uiGmapgoogle-maps',
   
-  'plan.view',
-  'plan-model'
+  'plan.select',
+  'plan.list',
+  'plan-model',
+  'plan-state'
 ])
   
 .controller('mainCtrl', ['$scope', 'Restangular',
@@ -44,24 +37,8 @@ function mainController($scope,Restangular) {
   
 }])
   
-.config(['$stateProvider', '$urlRouterProvider', 'uiGmapGoogleMapApiProvider',
-function ($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {
-  
-  // Set the default URL
-  $urlRouterProvider.otherwise('view');
-  
-/*
-  $stateProvider
-    .state('plan', {
-      abstract: true,
-      url: "/plan",
-      views: {
-        "top-level": {
-          templateUrl: "page.tpl.html"
-        }
-      }
-    });
-*/
+.config(['uiGmapGoogleMapApiProvider',
+function (uiGmapGoogleMapApiProvider) {
   
   uiGmapGoogleMapApiProvider.configure({
     key: 'AIzaSyCUaIqnBzxh9KI4Dw18_MYiBsrWGC_ScIE',
@@ -77,7 +54,5 @@ function (Restangular, uiGmapGoogleMapApi) {
   });
   
   Restangular.setBaseUrl("http://planning.ballandia.co.uk/api.php");
-  
-  console.log('App.ps Started');
 }])
 ;

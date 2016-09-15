@@ -1,5 +1,5 @@
 //******************************************************************************
-// MODULE:       plan-model
+// MODULE: plan-model
 // $Date: $
 // $Revision: $
 // $LastChangedBy: $
@@ -27,6 +27,7 @@ describe('Model',function()
     expect(model.numbers).toBeDefined();
     expect(model.apptypes).toBeDefined();
     expect(model.recordCount).toBeDefined();
+    expect(model.applications).toBeDefined();
   }));
   
   it('should call API to list streets',inject(function($httpBackend,model) {
@@ -246,6 +247,176 @@ describe('Model',function()
     
     $httpBackend.flush();
     expect(result).toBe(1);
+  }));
+  
+  it('should call API to list applications',inject(function($httpBackend,model) {
+    var appList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?func=list').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { id:"4", code:"S\/0691\/00\/F", number:"14", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"},
+          { id:"5", code:"S\/0692\/00\/F", number:"15", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"},
+          { id:"6", code:"S\/0693\/00\/F", number:"16", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"},
+          { id:"7", code:"S\/0695\/00\/F", number:"19", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"}
+        ], {}, ''];
+      });
+    
+    model.applications(null,null,null).then(
+      function onSuccess(data) {
+        appList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(appList.length).toBe(4);
+    expect(appList[1].label).toBe('Extension');
+  }));
+  
+  it('should call API to list applications',inject(function($httpBackend,model) {
+    var appList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?func=list').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { id:"4", code:"S\/0691\/00\/F", number:"14", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"},
+          { id:"5", code:"S\/0692\/00\/F", number:"15", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"},
+          { id:"6", code:"S\/0693\/00\/F", number:"16", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"},
+          { id:"7", code:"S\/0695\/00\/F", number:"19", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"}
+        ], {}, ''];
+      });
+    
+    model.applications(null,null,null).then(
+      function onSuccess(data) {
+        appList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(appList.length).toBe(4);
+    expect(appList[1].label).toBe('Extension');
+  }));
+  
+  it('should call API to list applications by street',inject(function($httpBackend,model) {
+    var appList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?func=list&street=1').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { id:"6", code:"S\/0693\/00\/F", number:"16", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"},
+          { id:"7", code:"S\/0695\/00\/F", number:"19", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"}
+        ], {}, ''];
+      });
+    
+    model.applications(null,null,{id:1}).then(
+      function onSuccess(data) {
+        appList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(appList.length).toBe(2);
+    expect(appList[1].label).toBe('Extension');
+  }));
+  
+  it('should call API to list applications by location',inject(function($httpBackend,model) {
+    var appList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?func=list&location=1').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { id:"7", code:"S\/0695\/00\/F", number:"19", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"}
+        ], {}, ''];
+      });
+  
+    model.applications(null,{id:1},null).then(
+      function onSuccess(data) {
+        appList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(appList.length).toBe(1);
+    expect(appList[0].label).toBe('Extension');
+  }));
+  
+  it('should call API to list applications by apptype',inject(function($httpBackend,model) {
+    var appList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?apptype=1&func=list').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { id:"4", code:"S\/0691\/00\/F", number:"14", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"},
+          { id:"5", code:"S\/0692\/00\/F", number:"15", name:"Balland Field", date:"2000-04-12", label:"Toilet", wpc:"n", scdc:"a"},
+          { id:"7", code:"S\/0695\/00\/F", number:"19", name:"Balland Field", date:"2000-04-12", label:"Extension", wpc:"n", scdc:"a"}
+        ], {}, ''];
+      });
+    
+    model.applications({id:1},null,null).then(
+      function onSuccess(data) {
+        appList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(appList.length).toBe(3);
+    expect(appList[1].label).toBe('Toilet');
+  }));
+  
+  it('should call API to list applications by location and apptype',inject(function($httpBackend,model) {
+    var appList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?apptype=1&func=list&location=1').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { id:"7", code:"S\/0695\/00\/F", number:"19", name:"Balland Field", date:"2000-04-12", label:"Robots", wpc:"n", scdc:"a"}
+        ], {}, ''];
+      });
+    
+    model.applications({id:1},{id:1},null).then(
+      function onSuccess(data) {
+        appList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(appList.length).toBe(1);
+    expect(appList[0].label).toBe('Robots');
+  }));
+  
+  it('should call API to list applications by street and apptype',inject(function($httpBackend,model) {
+    var appList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?apptype=1&func=list&street=1').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { id:"5", code:"S\/0692\/00\/F", number:"15", name:"Balland Field", date:"2000-04-12", label:"Toilet", wpc:"n", scdc:"a"},
+          { id:"7", code:"S\/0695\/00\/F", number:"19", name:"Balland Field", date:"2000-04-12", label:"Robots", wpc:"n", scdc:"a"}
+        ], {}, ''];
+      });
+    
+    model.applications({id:1},null,{id:1}).then(
+      function onSuccess(data) {
+        appList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(appList.length).toBe(2);
+    expect(appList[1].label).toBe('Robots');
+  }));
+  
+  it('should call API to list applications by location and apptype ignoring street',inject(function($httpBackend,model) {
+    var appList;
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?apptype=1&func=list&location=1').respond(
+      function (method, url, data, headers, params) {
+        return [200, [
+          { id:"7", code:"S\/0695\/00\/F", number:"19", name:"Balland Field", date:"2000-04-12", label:"Robots", wpc:"n", scdc:"a"}
+        ], {}, ''];
+      });
+    
+    model.applications({id:1},{id:1},{id:1}).then(
+      function onSuccess(data) {
+        appList = data;
+      });
+    
+    $httpBackend.flush();
+    expect(appList.length).toBe(1);
+    expect(appList[0].label).toBe('Robots');
   }));
   
 });
