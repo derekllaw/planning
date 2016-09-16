@@ -99,6 +99,7 @@ angular.module('plan.select', [])
         self.updateNumbers();
         self.updateCount();
         state.closeList();
+        state.closeShow();
       };
       
       // when street updated

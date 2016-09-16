@@ -1,33 +1,54 @@
 <div ng-controller="ListCtrl as list">
-  <div class="panel panel-primary" uib-collapse="!list.isOpen">
+  <div class="panel panel-info" uib-collapse="!list.isOpen">
     <div class="panel-body">
-      <table st-table="list.emptyList" st-safe-src="list.appList" class="table table-striped table-condensed table-responsive">
+      <table st-table="list.emptyList" st-safe-src="list.appList"
+             class="table table-striped table-condensed table-responsive">
         <thead>
         <tr>
-          <th>Application</th>
-          <th>Address</th>
-          <th>Date</th>
-          <th>Type</th>
+          <th st-sort="code">Application</th>
+          <th st-sort="name">Address</th>
+          <th st-sort="date">Date</th>
+          <th st-sort="label">Type</th>
           <th>WPC</th>
           <th>SCDC</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="app in list.appList" ng-click="list.onRowClick(app)">
+        <tr ng-repeat="app in list.emptyList" ng-click="list.onRowClick(app)">
           <td>{{app.code}}</td>
           <td>{{app.number}} {{app.name}}</td>
           <td>{{app.date}}</td>
           <td>{{app.label}}</td>
-          <td><i class="fa fa-thumbs-up icon-yes" ng-show="app.wpc==='a'"></i><i class="fa fa-thumbs-down icon-no" ng-show="app.wpc==='r'"></i><i class="fa fa-meh-o" ng-show="app.wpc==='n'"></i></td>
-          <td><i class="fa fa-check icon-yes" ng-show="app.scdc==='a'"></i><i class="fa fa-close icon-no" ng-show="app.scdc==='r'"></i></td>
+          <td><i class="fa fa-thumbs-up icon-yes" ng-show="app.wpc==='a'"></i><i class="fa fa-thumbs-down icon-no"
+                                                                                 ng-show="app.wpc==='r'"></i><i
+            class="fa fa-meh-o" ng-show="app.wpc==='n'"></i></td>
+          <td><i class="fa fa-check icon-yes" ng-show="app.scdc==='a'"></i><i class="fa fa-close icon-no"
+                                                                              ng-show="app.scdc==='r'"></i><i
+            class="fa fa-undo" ng-show="app.scdc==='w'"></i></td>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+          <td colspan="6">
+            <div st-pagination="" st-items-by-page="10" st-displayed-pages="5"></div>
+          </td>
+        </tr>
+        </tfoot>
       </table>
     </div>
     <div class="panel-footer">
-    <span class="text-left">WPC <i class="fa fa-thumbs-up icon-yes"></i> recommend approval, <i class="fa fa-thumbs-down icon-no"></i> recommend refusal, <i class="fa fa-meh-o"></i> make no recommendation.
-    SCDC <i class="fa fa-check icon-yes"></i> approved, <i class="fa fa-close icon-no"></i> refused.</span>
-    <span class="text-right">Selected: {{list.selected}}</span>
+      <div class="row">
+        <div class="col-sm-7">
+          WPC <i class="fa fa-thumbs-up icon-yes"></i> recommend approval,
+          <i class="fa fa-thumbs-down icon-no"></i> recommend refusal,
+          <i class="fa fa-meh-o"></i> make no recommendation.
+        </div>
+        <div class="col-sm-5 text-right">
+          SCDC <i class="fa fa-check icon-yes"></i> approved,
+          <i class="fa fa-close icon-no"></i> refused,
+          <i class="fa fa-undo"></i> application withdrawn.
+        </div>
+      </div>
     </div>
   </div>
 </div>

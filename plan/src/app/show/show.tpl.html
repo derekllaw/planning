@@ -1,0 +1,47 @@
+<div ng-controller="ShowCtrl as show">
+  <div class="panel panel-info" uib-collapse="!show.isOpen">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-sm-10">
+          <a href="#" class="panel-title text-left">{{show.app.code}}</a>
+        </div>
+        <div class="col-sm-2 text-right">
+          {{show.app.date | date: 'd MMM yyyy'}}
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="row show-address">
+            <div class="col-sm-12">{{show.app.number}} {{show.app.name}}</div>
+          </div>
+          <div class="row show-type">
+            <div class="col-sm-12">{{show.app.label}}</div>
+          </div>
+          <div class="row show-desc">
+            <div class="col-sm-12">{{show.details.appdesc}}</div>
+          </div>
+        </div>
+        <div class="col-sm-3 show-result">
+          <div class="row">
+            <div class="col-sm-12">WPC <span ng-show="show.app.wpc==='a'">recommended approval.</span>
+              <span ng-show="show.app.wpc==='r'">recommended refusal.</span>
+              <span ng-show="show.app.wpc==='n'">made no recommendation.</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <span ng-show="show.app.scdc==='a'">SCDC<span ng-show="show.app.wpc==='r'"> disagreed and</span><span ng-show="show.app.wpc==='a'"> agreed and</span> approved the application.</span>
+              <span ng-show="show.app.scdc==='r'">SCDC<span ng-show="show.app.wpc==='r'"> agreed and</span><span ng-show="show.app.wpc==='a'"> disagreed and</span> refused the application.</span>
+              <span ng-show="show.app.scdc==='w'">The application was withdrawn.</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-4">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

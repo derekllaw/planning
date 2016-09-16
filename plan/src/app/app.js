@@ -19,6 +19,7 @@ angular.module('plan', [
   
   'plan.select',
   'plan.list',
+  'plan.show',
   'plan-model',
   'plan-state'
 ])

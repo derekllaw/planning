@@ -160,5 +160,16 @@ angular.module('plan-model',['restangular'])
     return Restangular.all('/').getList(params);
   };
   
+  /*******************************************************************************
+   model::getApplicationDetails
+   
+   Description:   Return detailed application record
+   Params:        appId - ID of application record
+   Returns:       promise which resolves to details, or rejects with reason
+   *******************************************************************************/
+  model.getApplicationDetails = function(appId) {
+    return Restangular.one('/').get({ func:'get', id:appId });
+  };
+  
   return model;
 }]);

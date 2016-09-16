@@ -28,6 +28,7 @@ describe('Model',function()
     expect(model.apptypes).toBeDefined();
     expect(model.recordCount).toBeDefined();
     expect(model.applications).toBeDefined();
+    expect(model.getApplicationDetails).toBeDefined();
   }));
   
   it('should call API to list streets',inject(function($httpBackend,model) {
@@ -417,6 +418,40 @@ describe('Model',function()
     $httpBackend.flush();
     expect(appList.length).toBe(1);
     expect(appList[0].label).toBe('Robots');
+  }));
+  
+  it('should call API to return application details',inject(function($httpBackend,model) {
+    var result = {};
+    //Create an expectation for the correct url, and respond with a mock object
+    $httpBackend.expectGET('/?func=get&id=1').respond(
+      function (method, url, data, headers, params) {
+        return [200,
+          {
+            "code":"S\/1219\/04\/F",
+            "date":"2004-06-14",
+            "address":"1",
+            "number":"6",
+            "name":"Balland Field",
+            "geolat":"52.3089966",
+            "geolng":"0.0561003000",
+            "label":"Conservatory",
+            "appdesc":"Horrible white thing",
+            "wpc":"a",
+            "meeting":"2004-06-29",
+            "item":"11",
+            "scdc":"a"
+          }, {}, ''];
+      });
+    
+    model.getApplicationDetails(1).then(
+      function onSuccess(data) {
+        result = data;
+      }
+    );
+    
+    $httpBackend.flush();
+    expect(result.address).toBe("1");
+    expect(result.name).toBe("Balland Field");
   }));
   
 });
