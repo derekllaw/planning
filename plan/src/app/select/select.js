@@ -131,10 +131,14 @@ angular.module('plan.select', [])
         self.reset();
       };
       
-      self.onFetchClick = function () {
+      self.onShowClick = function () {
         model.applications(self.apptype,self.number,self.street).then(
           function onSuccess(data) {
             state.openList(data);
+            if (data.length==1)
+            {
+              state.openShow(data[0]);
+            }
           },
           function onError(reason) {
             console.log("Error " + reason.status + ", " + reason.statusText);

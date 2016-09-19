@@ -42,7 +42,7 @@ function mainController($scope,Restangular) {
 function (uiGmapGoogleMapApiProvider) {
   
   uiGmapGoogleMapApiProvider.configure({
-    key: 'AIzaSyCUaIqnBzxh9KI4Dw18_MYiBsrWGC_ScIE',
+    key: 'AIzaSyBX6B0VdzGNStK65bSf_MWZvtEf-4OlKws',
     libraries: 'weather,geometry,visualization'
   });
   

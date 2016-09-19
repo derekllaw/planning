@@ -1,3 +1,19 @@
 @import '../app/select/select.less';
 @import '../app/list/list.less';
 @import '../app/show/show.less';
+
+label {
+  margin-bottom: 0;
+  margin-top: 4px;
+  font-size: smaller;
+}
+
+.skip-small {
+  display:none;
+}
+
+@media (min-width: 768px) {
+  .skip-small {
+    display: inline-block;
+  }
+}
