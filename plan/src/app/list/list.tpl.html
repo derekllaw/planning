@@ -2,7 +2,7 @@
   <div class="panel panel-info" uib-collapse="!list.isOpen">
     <div class="panel-body list">
       <table st-table="list.emptyList" st-safe-src="list.appList"
-             class="table table-striped table-condensed table-responsive">
+             class="list-table table table-striped table-condensed table-responsive table-hover">
         <thead>
         <tr>
           <th st-sort="code">Application</th>
@@ -14,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="app in list.emptyList" ng-click="list.onRowClick(app)">
+        <tr ng-repeat="app in list.emptyList" ng-click="list.onRowClick(app)" ng-class="{ success:app.id===list.selected }">
           <td>{{app.code}}</td>
           <td>{{app.number}} {{app.name}}</td>
           <td>{{app.date}}</td>

@@ -13,30 +13,24 @@ angular.module('plan-state',[])
     listOpen: false,
     listData: [],
     showOpen: false,
-    showData: {}
+    showData: {},
+    adminFlag: false
   };
   
-  function stateChanged(stateName) {
-    $rootScope.$broadcast(stateName + '-state-changed');
+  function stateChanged() {
+    $rootScope.$broadcast('state-changed');
   }
   
-  function listStateChanged() {
-    stateChanged('list');
-  }
-  
-  function showStateChanged() {
-    stateChanged('show');
-  }
-  
+ 
   state.closeList = function() {
     state.listOpen = false;
-    listStateChanged();
+    stateChanged();
   };
   
   state.openList = function(listData) {
     state.listData = listData;
     state.listOpen = true;
-    listStateChanged();
+    stateChanged();
   };
   
   state.isListOpen = function() {
@@ -49,13 +43,13 @@ angular.module('plan-state',[])
   
   state.closeShow = function() {
     state.showOpen = false;
-    showStateChanged();
+    stateChanged();
   };
   
   state.openShow = function(showData) {
     state.showData = showData;
     state.showOpen = true;
-    showStateChanged();
+    stateChanged();
   };
   
   state.isShowOpen = function() {
@@ -64,6 +58,15 @@ angular.module('plan-state',[])
   
   state.getShowData = function() {
     return state.showData;
+  };
+
+  state.setAdmin = function(flag) {
+    state.adminFlag = flag;
+    stateChanged();
+  };
+  
+  state.isAdmin = function() {
+    return state.adminFlag;
   };
   
   return state;

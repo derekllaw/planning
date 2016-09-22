@@ -13,11 +13,13 @@ angular.module('plan.select', [])
  
  Description:   controller for the select component.
  *******************************************************************************/
-  .controller('SelectCtrl', ['model', 'state',
-    function SelectController(model, state) {
+  .controller('SelectCtrl', ['$scope', 'model', 'state',
+    function SelectController($scope, model, state) {
       var self = this;
       
       self.count = 0;
+      self.isAdmin = state.isAdmin();
+      self.isEdit = false;
       
       self.streetList = [];
       self.street = null;
@@ -27,7 +29,11 @@ angular.module('plan.select', [])
       
       self.apptypeList = [];
       self.apptype = null;
-      
+  
+      $scope.$on('state-changed', function (event, args) {
+        self.isAdmin = state.isAdmin();
+      });
+  
       self.updateCount = function () {
         model.recordCount(self.street, self.number, self.apptype).then(
           function onSuccess(data) {
@@ -130,7 +136,15 @@ angular.module('plan.select', [])
       self.onResetClick = function () {
         self.reset();
       };
-      
+  
+      self.onLoginClick = function () {
+        state.setAdmin(true);
+      };
+  
+      self.onLogoutClick = function () {
+        state.setAdmin(false);
+      };
+  
       self.onShowClick = function () {
         model.applications(self.apptype,self.number,self.street).then(
           function onSuccess(data) {

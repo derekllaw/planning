@@ -1,0 +1,61 @@
+<!-- Show Panel edit version -->
+<div class="panel-body">
+  <div class="row">
+    <form>
+      <div class="col-sm-6">
+        <div class="row show-address">
+          <div class="col-sm-6">
+            <label>Number</label>
+            <select class="form-control" ng-model="select.number" ng-disabled="select.numberList.length<2"
+                    ng-change="select.onNumberChange()"
+                    ng-options="number as number.number for number in select.numberList">
+              <option value="">All numbers</option>
+            </select>
+          </div>
+          <div class="col-sm-6">
+            <label>Street</label>
+            <select class="form-control" ng-model="select.street" ng-change="select.onStreetChange()"
+                    ng-options="street as street.name for street in select.streetList">
+              <option value="">All streets</option>
+            </select>
+          </div>
+        </div>
+        <div class="row show-type">
+          <div class="col-sm-12">{{show.app.label}}</div>
+        </div>
+        <div class="row show-desc">
+          <div class="col-sm-12">{{show.details.appdesc}}</div>
+        </div>
+      </div>
+      <div class="col-sm-6 show-result">
+        <div class="row">
+          <div class="col-sm-12">WPC <span ng-show="show.app.wpc==='a'">recommended approval.</span>
+            <span ng-show="show.app.wpc==='r'">recommended refusal.</span>
+            <span ng-show="show.app.wpc==='n'">made no recommendation.</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+              <span ng-show="show.app.scdc==='a'">SCDC<span ng-show="show.app.wpc==='r'"> disagreed and</span><span
+                ng-show="show.app.wpc==='a'"> agreed and</span> approved the application.</span>
+            <span ng-show="show.app.scdc==='r'">SCDC<span ng-show="show.app.wpc==='r'"> agreed and</span><span
+              ng-show="show.app.wpc==='a'"> disagreed and</span> refused the application.</span>
+            <span ng-show="show.app.scdc==='w'">The application was withdrawn.</span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="panel-footer" ng-show="show.isAdmin">
+  <div class="row show-buttons">
+    <div class="col-sm-12">
+      <button class="btn btn-sm btn-primary" ng-click="show.onSaveClick()">
+        <i class="fa fa-check"></i> Save
+      </button>
+      <button class="btn btn-sm btn" ng-click="show.onCancelClick()">
+        <i class="fa fa-undo"></i> Cancel
+      </button>
+    </div>
+  </div>
+</div>

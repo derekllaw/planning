@@ -19,7 +19,6 @@ angular.module('plan.show', [])
       
       self.app = {};
       self.details = {};
-      
       self.mapOptions = {
         center: {
           latitude: "52.3156",
@@ -27,6 +26,9 @@ angular.module('plan.show', [])
         },
         zoom: 16
       };
+      self.mapMarkers = [];
+      self.isAdmin = state.isAdmin();
+      self.isEdit = false;
       
       // We need to refresh the map when it is ready, otherwise we will
       // end up with an broken view of the map.
@@ -42,18 +44,30 @@ angular.module('plan.show', [])
           });
         });
       
-      $scope.$on('show-state-changed', function (event, args) {
+      $scope.$on('state-changed', function (event, args) {
         self.isOpen = state.isShowOpen();
         if (self.isOpen)
         {
+          self.isAdmin = state.isAdmin();
           self.app = state.getShowData();
           model.getApplicationDetails(self.app.id).then(
             function onSuccess(data) {
               self.details = data;
-              if ((self.details.geolat!==null) && (self.details.geolng!==null))
+              if ((self.details.geolat !== null) && (self.details.geolng !== null))
               {
                 self.mapOptions.center.latitude = self.details.geolat;
                 self.mapOptions.center.longitude = self.details.geolng;
+  
+                self.mapMarkers.length = 0;
+                self.mapMarkers.push({
+                  id: self.app.id,
+                  coords: {
+                    latitude: self.details.geolat,
+                    longitude: self.details.geolng
+                  },
+                  options: {labelClass: 'maplabels'}
+                });
+                
                 $scope.googlemap.refresh();
               }
             },
@@ -64,6 +78,22 @@ angular.module('plan.show', [])
         }
       });
       
+      self.onEditClick = function() {
+        self.isEdit = true;
+      };
+  
+      self.onDeleteClick = function() {
+    
+      };
+  
+      self.onSaveClick = function() {
+        self.isEdit = false;
+      };
+  
+      self.onCancelClick = function() {
+        self.isEdit = false;
+      };
+  
       self.isOpen = state.isShowOpen();
     }])
 ;

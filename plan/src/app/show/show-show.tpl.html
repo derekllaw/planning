@@ -1,0 +1,61 @@
+<!-- Show Panel non-edit version -->
+<div class="panel-body">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="row show-address">
+        <div class="col-sm-12">{{show.app.number}} {{show.app.name}}</div>
+      </div>
+      <div class="row show-type">
+        <div class="col-sm-12">{{show.app.label}}</div>
+      </div>
+      <div class="row show-desc">
+        <div class="col-sm-12">{{show.details.appdesc}}</div>
+      </div>
+    </div>
+    <div class="col-sm-3 show-result">
+      <div class="row">
+        <div class="col-sm-12">WPC <span ng-show="show.app.wpc==='a'">recommended approval.</span>
+          <span ng-show="show.app.wpc==='r'">recommended refusal.</span>
+          <span ng-show="show.app.wpc==='n'">made no recommendation.</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+              <span ng-show="show.app.scdc==='a'">SCDC<span ng-show="show.app.wpc==='r'"> disagreed and</span><span
+                ng-show="show.app.wpc==='a'"> agreed and</span> approved the application.</span>
+          <span ng-show="show.app.scdc==='r'">SCDC<span ng-show="show.app.wpc==='r'"> agreed and</span><span
+            ng-show="show.app.wpc==='a'"> disagreed and</span> refused the application.</span>
+          <span ng-show="show.app.scdc==='w'">The application was withdrawn.</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-4">
+      <ui-gmap-google-map control="googlemap"
+                          ng-if="show.mapOptions"
+                          center="show.mapOptions.center"
+                          zoom="show.mapOptions.zoom"
+                          dragging="false"
+                          pan="true">
+        <ui-gmap-markers
+          idkey="show.mapMarkers.id"
+          options="'options'"
+          coords="'coords'"
+          models="show.mapMarkers">
+        </ui-gmap-markers>
+      </ui-gmap-google-map>
+    </div>
+  </div>
+</div>
+<div class="panel-footer" ng-show="show.isAdmin">
+  <div class="row show-buttons">
+    <div class="col-sm-12">
+      <button class="btn btn-sm btn-primary" ng-click="show.onEditClick()">
+        <i class="fa fa-edit"></i> Edit
+      </button>
+      <button class="btn btn-sm btn-danger" ng-click="show.onDeleteClick()">
+        <i class="fa fa-close"></i> Delete
+      </button>
+    </div>
+  </div>
+</div>

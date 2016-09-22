@@ -25,10 +25,11 @@ angular.module( 'plan.list', [
       self.selected = "";
       
       self.onRowClick = function(app) {
+        self.selected = app.id;
         state.openShow(app);
       };
       
-      $scope.$on('list-state-changed', function(event, args){
+      $scope.$on('state-changed', function(event, args){
         self.isOpen = state.isListOpen();
         if (self.isOpen)
         {
